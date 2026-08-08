@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:summer_iub_app/screens/coffe_records_screen.dart';
 import 'package:summer_iub_app/screens/create_coffee_record_screen.dart';
 import 'package:summer_iub_app/state_management/coffee_state_management.dart';
 import 'package:summer_iub_app/widgets/app_backgroud_design_widget.dart';
+import 'package:summer_iub_app/screens/firebase_coffee_records.dart';
+
+
 
 // ACM
 
@@ -22,10 +26,22 @@ class _HomePageState extends State<HomePage> {
 
   int _coffeeCount = 0;
 
-  void incrememntCoffeeCount() {
+  Future<void> incrememntCoffeeCount() async{
     _coffeeCount++;
     setState((){}); // For giving user some feedba
     print("Coffee Count: $_coffeeCount");
+
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    Map<String, dynamic> data = {
+      "coffee_count": _coffeeCount,
+      "timestamp": Timestamp.now(),
+      "Dummy_data": "This is a dummy data for testing purposes."
+  };
+  
+  final response =await firestore.collection("count_collection").add(data);
+  print("Data added to Firestore with ID: ${response.id}");
+  final DocumentSnapshot dataCollected = await firestore.collection("count_collection").doc(response.id).get();
+  print("Data Collected from Firestore: ${dataCollected.data()}");
   }
 
   void navigateToCoffeeRecordsScreen() {
@@ -36,6 +52,10 @@ class _HomePageState extends State<HomePage> {
    void navigateToCreateCoffeeRecordScreen() {
    Navigator.of(context)
    .push(MaterialPageRoute(builder: (context) =>  CreateCoffeeRecordScreen()));
+  }
+  void navigateToFirebaseCoffeeRecordScreen() {
+   Navigator.of(context)
+   .push(MaterialPageRoute(builder: (context) =>  firebaseCoffeRecordsScreen()));
   }
 
 
@@ -176,7 +196,33 @@ class _HomePageState extends State<HomePage> {
                        
                         
                       ],
-                    )
+                    ),
+                    SizedBox(height: 10.00),
+                    ElevatedButton.icon(
+                          onPressed:(){
+                            navigateToFirebaseCoffeeRecordScreen();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 50.00,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.shopping_cart,
+                            color: Colors.brown,
+                          ),
+                          label: Text(
+                            "Check Firebase",
+                            style: TextStyle(
+                              color: Colors.brown,
+                              fontSize: 18.00,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                   ],
                 ),
               ),

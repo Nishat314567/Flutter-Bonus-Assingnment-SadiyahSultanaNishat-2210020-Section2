@@ -14,11 +14,12 @@ class CoffeRecordsScreen extends StatefulWidget {
 
 class _CoffeRecordsScreenState extends State<CoffeRecordsScreen> {
   
-  late Provider<CoffeeStateManagement> csm;
+  late var csm;
 
   initState() {
     super.initState();
-    csm = Provider.of<CoffeeStateManagement>(context, listen: false) as Provider<CoffeeStateManagement>;
+    csm = Provider.of<CoffeeStateManagement>(context, listen: false);
+    
   }
 
   @override
@@ -61,7 +62,7 @@ class _CoffeRecordsScreenState extends State<CoffeRecordsScreen> {
                 return Card(
                   child: ListTile(
                     leading: Icon(Icons.coffee),
-                    title: Text(coffeeRecord.title),
+                    title: Text(coffeeRecord.title??""),
                     subtitle: Text("${coffeeRecord.des} - Amount: ${coffeeRecord.amount} - ID: (${coffeeRecord.id})"),
                   ),
                 );

@@ -80,7 +80,7 @@ class CreateCoffeeRecordScreen extends StatelessWidget {
                         date: DateTime.now(),
                       );
             
-                      csm.addCoffeeRecord(newRecord);
+                      csm.addCoffeeRecordToFirebase(newRecord);
             
             
                       titleController.clear();
