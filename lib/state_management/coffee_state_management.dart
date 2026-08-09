@@ -56,6 +56,17 @@ class CoffeeStateManagement with ChangeNotifier {
 
      
   }
+  Future<void> updateCoffeeRecordInFirebase(String docId, String title, String des, double amount) async {
+  await _firestore.collection(FirebaseConstant.coffeeRecordsCollection).doc(docId).update({
+    "title": title,
+    "des": des,
+    "amount": amount,
+  });
+}
+
+Future<void> deleteCoffeeRecordFromFirebase(String docId) async {
+  await _firestore.collection(FirebaseConstant.coffeeRecordsCollection).doc(docId).delete();
+}
   
 }
 
